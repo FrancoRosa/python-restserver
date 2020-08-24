@@ -24,3 +24,7 @@ body {
 .events {
   margin: 2em;
 }
+ .tables {
+   display: flex;
+   justify-content: center;
+ }

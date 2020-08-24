@@ -68,7 +68,6 @@ const send = () => {
       chrono = !chrono;
       startChrono = Date.now()
       if (chrono){
-        const file = fileInput.value.split('\\')[2]
         const samples = sampleVolume.value
         const method = sortMethod.value
         fetch(server, {
@@ -87,6 +86,7 @@ const send = () => {
           showStop(data['time']);
           eventsLog.appendChild(message(data['message'],'success'));
           submitbutton.classList.toggle('is-loading');
+          fillTable(data['unordered'], data['ordered']);
         })
         .catch((error) => {
           eventsLog.appendChild(message(`Error en el servidor Python`,'danger '))
@@ -106,6 +106,8 @@ const updateFile = () => {
   const eventsLog = document.querySelector('.events');
   const fileInput = document.querySelector('#file-upload input[type=file]');
   fileInput.onchange = () => {
+    chrono = !chrono;
+    startChrono = Date.now()
     if (fileInput.files.length > 0) {
       const fileName = document.querySelector('#file-upload .file-name');
       fileName.textContent = fileInput.files[0].name;
@@ -123,6 +125,7 @@ const updateFile = () => {
       })
         .then(response => response.json())
         .then(data => {
+          chrono = !chrono;
           console.log(data);
           eventsLog.appendChild(message(data['message'],'success'));
         })
@@ -134,7 +137,13 @@ const updateFile = () => {
   }
 };
 
+const removeLogs = () => {
+  const logs = document.querySelectorAll('.message-log');
+  if (logs.length > 6) logs[0].remove();
+}
+
 const message = (text, type) => {
+  removeLogs();
   const timestamp = moment().format('HH:MM:ss')
   const messagelog = document.createElement('p')
   const messageContent = document.createElement('span')
@@ -143,8 +152,25 @@ const message = (text, type) => {
   prompt.textContent = `> ${timestamp}`
   messageContent.classList = `has-text-${type}`
   messageContent.innerHTML = ` - ${text}`
+  messagelog.classList = 'message-log'
   messagelog.append(prompt, messageContent);
   return messagelog;
+}
+
+const fillTable = (unordered, ordered) => {
+  const tableBody = document.querySelector('.table-body')
+  tableBody.innerHTML = ''
+  const size = ordered.length
+  let index = 0
+  let innerHTML = ''
+  while (index < size){
+    const tableRow = document.createElement('tr');
+    innerHTMLdata = `<td>${index}</td><td>${unordered[index]}</td><td>${ordered[index]}</td>`;
+    console.log(innerHTMLdata);
+    tableRow.innerHTML = innerHTMLdata;
+    tableBody.appendChild(tableRow);
+    index = index + 1;
+  }
 }
 
 window.onload = () => {
