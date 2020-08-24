@@ -48,8 +48,8 @@ def merge(lista):
         primera_mitad = lista[:mitad]
         segunda_mitad = lista[mitad:]
 
-        merge_sort(primera_mitad)
-        merge_sort(segunda_mitad)
+        merge(primera_mitad)
+        merge(segunda_mitad)
         i = 0
         j = 0
         k = 0
@@ -72,7 +72,7 @@ def merge(lista):
             lista[k] = segunda_mitad[j]
             j += 1
             k += 1
-    return merge
+    return lista
 
 def cuentas(lista):
     maximo = max(lista) + 1
@@ -122,18 +122,25 @@ def particionar(lista, inicio, fin):
 
 def orderMethod(method, array, samples):
     samples = int(samples)
+    
     if method == 'Burbuja':
         return burbuja(array[:samples])
+    
     if method == 'Shell':
         return shell(array[:samples])
+    
     if method == 'Merge':
         return merge(array[:samples])
+    
     if method == 'Seleccion':
         return seleccion(array[:samples])
+    
     if method == 'Cuentas':
         return cuentas(array[:samples]) 
+   
     if method == 'QuickSort':
         return quick_sort(array[:samples])
+    
     if method == 'PythonSort':
         return sorted(array[:samples])   
     

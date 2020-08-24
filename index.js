@@ -1,5 +1,8 @@
 let chrono = false;
-let startChrono = Date.now()
+let updateTable = false;
+let startChrono = Date.now();
+let ordered = [];
+let unordered = [];
 const server = 'http://localhost:5000/'
 
 
@@ -86,7 +89,9 @@ const send = () => {
           showStop(data['time']);
           eventsLog.appendChild(message(data['message'],'success'));
           submitbutton.classList.toggle('is-loading');
-          fillTable(data['unordered'], data['ordered']);
+          ordered = data['unordered'];
+          unordered = data['ordered'];
+          setTimeout(fillTable, 200);
         })
         .catch((error) => {
           eventsLog.appendChild(message(`Error en el servidor Python`,'danger '))
@@ -131,6 +136,7 @@ const updateFile = () => {
         })
         .catch(error => {
           console.log(error);
+          chrono = !chrono;
           eventsLog.appendChild(message('Error en el servidor de python, no pudo cargar archivo','danger'));
         });
     }
@@ -139,7 +145,7 @@ const updateFile = () => {
 
 const removeLogs = () => {
   const logs = document.querySelectorAll('.message-log');
-  if (logs.length > 6) logs[0].remove();
+  if (logs.length > 12) logs[0].remove();
 }
 
 const message = (text, type) => {
@@ -157,12 +163,11 @@ const message = (text, type) => {
   return messagelog;
 }
 
-const fillTable = (unordered, ordered) => {
+const fillTable = () => {
   const tableBody = document.querySelector('.table-body')
   tableBody.innerHTML = ''
   const size = ordered.length
   let index = 0
-  let innerHTML = ''
   while (index < size){
     const tableRow = document.createElement('tr');
     innerHTMLdata = `<td>${index}</td><td>${unordered[index]}</td><td>${ordered[index]}</td>`;

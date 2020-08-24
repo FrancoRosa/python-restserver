@@ -47,8 +47,8 @@ def create_task():
         message = '!<%s muestras!> ordenadas en !<%2.3f sec!>, con el metodo !<%s!>.'%(samples, elapsed, method)
         message = message.replace('!<','<span class="has-text-info">')
         message = message.replace('!>','</span class="has-text-info">')
-        print(message)
-        return jsonify({'message': message, 'time': elapsed, 'ordered': ordered[:samples], 'unordered': unordered[:samples] }) 
+        limit = min(1000, samples)
+        return jsonify({'message': message, 'time': elapsed, 'ordered': ordered[:limit], 'unordered': unordered[:limit] }) 
     
     return jsonify({'error': 'Not found'}) 
 if __name__ == '__main__':

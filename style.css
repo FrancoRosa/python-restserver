@@ -2,8 +2,10 @@ body {
   margin: 2em;
 }
 
-
-
+h1 {
+  margin-top: 2em;
+  font-size: 16px !important;
+}
 .input, .select select, .textarea {
   background-color: #282f2f;
   border-color: #5e6d6f;
@@ -24,7 +26,14 @@ body {
 .events {
   margin: 2em;
 }
- .tables {
-   display: flex;
-   justify-content: center;
- }
+
+.tables {
+  display: flex;
+  justify-content: center;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+ 
+ .tables::-webkit-scrollbar {
+  display: none;
+}
