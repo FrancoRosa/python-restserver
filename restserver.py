@@ -30,6 +30,7 @@ def create_task():
 
     if 'file' in jsonpost:
         start = time()
+        print('... leyendo %s'%(jsonpost['file']))
         unordered = read_file(jsonpost['file'])
         end = time()
         elapsed = round(end - start, 3)
@@ -41,6 +42,7 @@ def create_task():
         method = jsonpost['method']
         samples = int(jsonpost['samples'])
         start = time()
+        print('... resolviendo %d muestras con el metodo %s'%(samples, method))
         ordered = orderMethod(method, unordered, samples)
         end = time()
         elapsed = round(end - start, 3)

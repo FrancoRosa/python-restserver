@@ -13,7 +13,7 @@ const showStop = (seconds) => {
   const decRender = document.querySelector('.millis');
 
   min = (parseInt(millis/60000)).toString().padStart(2, "0");
-  sec = (parseInt(millis/1000)).toString().padStart(2, "0");
+  sec = (parseInt((millis%60000)/1000)).toString().padStart(2, "0");
   dec = Math.round(millis%1000).toString().padStart(3, "0");
   minRender.innerHTML = min;
   secRender.innerHTML = sec;
@@ -32,7 +32,7 @@ const timer = () => {
 
   const showChrono = (millis) => {
     min = (parseInt(millis/60000)).toString().padStart(2, "0");
-    sec = (parseInt(millis/1000)).toString().padStart(2, "0");
+    sec = (parseInt((millis%60000)/1000)).toString().padStart(2, "0");
     dec = parseInt(millis%1000).toString().padStart(3, "0");
     
     
@@ -89,8 +89,8 @@ const send = () => {
           showStop(data['time']);
           eventsLog.appendChild(message(data['message'],'success'));
           submitbutton.classList.toggle('is-loading');
-          ordered = data['unordered'];
-          unordered = data['ordered'];
+          unordered = data['unordered'];
+          ordered = data['ordered'];
           setTimeout(fillTable, 200);
         })
         .catch((error) => {
