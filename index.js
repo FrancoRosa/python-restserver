@@ -1,5 +1,6 @@
 let chrono = false;
 let startChrono = Date.now()
+const server = 'http://localhost:5000/'
 
 const send = () => {
   const buttonParent = document.querySelector('.is-fetching');
@@ -22,20 +23,29 @@ const send = () => {
         const samples = sampleVolume.value
         const method = sortMethod.value
         eventsLog.appendChild(message(`Enviando ${file} con ${samples} muestras para ordenar con el metodo ${method} al servidor Python`,'success'))
-        fetch('http://localhost:5000/sort', {
-          mode: 'no-cors',
+        fetch(server, {
           method: 'POST',
-          body: JSON.stringify({file, samples, method}),
+          mode: 'cors',
+          headers: {
+            'Content-Type': 'application/json',
+            'API-Key': 'secret'
+          },
+          body: JSON.stringify({samples, method}),
         })
-          .then(response => response.json())
-          .then(data => console.log(data))
-          .catch((error) => {
-            eventsLog.appendChild(message(`Error en el servidor Python`,'danger '))
-            console.error('Error:', error);
-            submitbutton.classList.toggle('is-loading');
-            chrono = !chrono;
-          });
-        // send post to API return file size
+        .then(response => response.json())
+        .then(data => {
+          console.log(data)
+          eventsLog.appendChild(message(data['message'],'success'));
+          submitbutton.classList.toggle('is-loading');
+          chrono = !chrono;
+        })
+        .catch((error) => {
+          eventsLog.appendChild(message(`Error en el servidor Python`,'danger '))
+          console.error('Error:', error);
+          submitbutton.classList.toggle('is-loading');
+          chrono = !chrono;
+        });
+      // send post to API return file size
       // send post to solve algoritm
       // Append what was done in the register
       }
@@ -77,14 +87,34 @@ const timer = () => {
 };
 
 const updateFile = () => {
+  const eventsLog = document.querySelector('.events');
   const fileInput = document.querySelector('#file-upload input[type=file]');
-    fileInput.onchange = () => {
-      if (fileInput.files.length > 0) {
-        const fileName = document.querySelector('#file-upload .file-name');
-        fileName.textContent = fileInput.files[0].name;
-        const fileError = document.querySelector('.file-error');
-        fileError.textContent = '';
-      }
+  fileInput.onchange = () => {
+    if (fileInput.files.length > 0) {
+      const fileName = document.querySelector('#file-upload .file-name');
+      fileName.textContent = fileInput.files[0].name;
+      const fileError = document.querySelector('.file-error');
+      fileError.textContent = '';
+      const data = { "file": fileInput.files[0].name }
+      fetch(server, {
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+          'Content-Type': 'application/json',
+          'API-Key': 'secret'
+        },
+        body: JSON.stringify(data),
+      })
+        .then(response => response.json())
+        .then(data => {
+          console.log(data);
+          eventsLog.appendChild(message(data['message'],'success'));
+        })
+        .catch(error => {
+          console.log(error);
+          eventsLog.appendChild(message('Python server error - Could not load file','danger'));
+        });
+    }
   }
 };
 
@@ -96,7 +126,7 @@ const message = (text, type) => {
   prompt.classList = 'has-text-link'
   prompt.textContent = `> ${timestamp}`
   messageContent.classList = `has-text-${type}`
-  messageContent.textContent = ` - ${text}`
+  messageContent.innerHTML = ` - ${text}`
   messagelog.append(prompt, messageContent);
   return messagelog;
 }
