@@ -2,6 +2,55 @@ let chrono = false;
 let startChrono = Date.now()
 const server = 'http://localhost:5000/'
 
+
+const showStop = (seconds) => {
+  const millis = seconds*1000;
+  const minRender = document.querySelector('.min');
+  const secRender = document.querySelector('.sec');
+  const decRender = document.querySelector('.millis');
+
+  min = (parseInt(millis/60000)).toString().padStart(2, "0");
+  sec = (parseInt(millis/1000)).toString().padStart(2, "0");
+  dec = Math.round(millis%1000).toString().padStart(3, "0");
+  minRender.innerHTML = min;
+  secRender.innerHTML = sec;
+  decRender.innerHTML = dec;
+}
+
+
+const timer = () => {
+  const minRender = document.querySelector('.min');
+  const secRender = document.querySelector('.sec');
+  const decRender = document.querySelector('.millis');
+
+  let min = 0;
+  let sec = 0;
+  let dec = 0;
+
+  const showChrono = (millis) => {
+    min = (parseInt(millis/60000)).toString().padStart(2, "0");
+    sec = (parseInt(millis/1000)).toString().padStart(2, "0");
+    dec = parseInt(millis%1000).toString().padStart(3, "0");
+    
+    
+    minRender.innerHTML = min;
+    secRender.innerHTML = sec;
+    decRender.innerHTML = dec;
+  }
+ 
+  const everyDec = () => {
+    if (chrono){
+      now = Date.now();
+      diference = now-startChrono;
+      showChrono(diference);
+    }
+  };
+
+  setInterval(everyDec, 17);
+  let now = 0;
+  let diference = 0;
+};
+
 const send = () => {
   const buttonParent = document.querySelector('.is-fetching');
   const submitbutton = document.querySelector('.button');
@@ -22,7 +71,6 @@ const send = () => {
         const file = fileInput.value.split('\\')[2]
         const samples = sampleVolume.value
         const method = sortMethod.value
-        eventsLog.appendChild(message(`Enviando ${file} con ${samples} muestras para ordenar con el metodo ${method} al servidor Python`,'success'))
         fetch(server, {
           method: 'POST',
           mode: 'cors',
@@ -34,10 +82,11 @@ const send = () => {
         })
         .then(response => response.json())
         .then(data => {
+          chrono = !chrono;
           console.log(data)
+          showStop(data['time']);
           eventsLog.appendChild(message(data['message'],'success'));
           submitbutton.classList.toggle('is-loading');
-          chrono = !chrono;
         })
         .catch((error) => {
           eventsLog.appendChild(message(`Error en el servidor Python`,'danger '))
@@ -50,39 +99,6 @@ const send = () => {
       // Append what was done in the register
       }
     }
-  }
-};
-
-const timer = () => {
-
-  const minRender = document.querySelector('.min');
-  const secRender = document.querySelector('.sec');
-  const decRender = document.querySelector('.dec');
-
-  let min = 0;
-  let sec = 0;
-  let dec = 0;
- 
-  const everyDec = () => {
-    if (chrono){
-      now = Date.now();
-      diference = now-startChrono;
-      diference = diference/100;
-      min = (parseInt(diference/600)%60).toString().padStart(2, "0");
-      sec = (parseInt(diference/10)%60).toString().padStart(2, "0");
-      dec = parseInt(diference%10);
-      minRender.innerHTML = min;
-      secRender.innerHTML = sec;
-      decRender.innerHTML = dec;
-    }
-  };
-
-  setInterval(everyDec, 100);
-  let now = 0;
-  let diference = 0;
-  
-  return {
-    everyDec,
   }
 };
 
@@ -112,7 +128,7 @@ const updateFile = () => {
         })
         .catch(error => {
           console.log(error);
-          eventsLog.appendChild(message('Python server error - Could not load file','danger'));
+          eventsLog.appendChild(message('Error en el servidor de python, no pudo cargar archivo','danger'));
         });
     }
   }

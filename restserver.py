@@ -30,26 +30,26 @@ def create_task():
     jsonpost = json.loads(request.data)
 
     if 'file' in jsonpost:
+        start = time()
         unordered = read_file(jsonpost['file'])
-        sampleStr = ', '.join(str(x) for x in unordered[:10])
-        message = 'File with !<%d samples!> was succesfully loaded, !<sample: %s!>'%sampleStr
+        end = time()
+        elapsed = end - start
+        message = 'Archivo con !<%d muestras!> cargadas con exito'%(len(unordered))
         message = message.replace('!<','<span class="has-text-info">')
         message = message.replace('!>','</span class="has-text-info">')
-        return jsonify({'message': message})
+        return jsonify({'message': message, 'time':elapsed, 'samples': unordered})
     if 'method' in jsonpost:
         method = jsonpost['method']
         samples = jsonpost['samples']
         start = time()
         ordered = orderMethod(method, unordered, samples)
-        sleep(1)
         end = time()
         elapsed = end - start
-        sampleStr = ', '.join(str(x) for x in ordered[:10])
-        message = '!<%s samples!> ordered in !<%2.3f sec!>, using !<%s!> method. !<%s!>'%(samples, elapsed, method, sampleStr)
+        message = '!<%s muestras!> ordenadas en !<%2.3f sec!>, con el metodo !<%s!>.'%(samples, elapsed, method)
         message = message.replace('!<','<span class="has-text-info">')
         message = message.replace('!>','</span class="has-text-info">')
         print(message)
-        return jsonify({'message': message}) 
+        return jsonify({'message': message, 'time': elapsed, 'samples': ordered}) 
     
     return jsonify({'error': 'Not found'}) 
 if __name__ == '__main__':

@@ -6,6 +6,7 @@ def read_file(filename):
   
   newcontent = []
   sample = content[0].strip()
+  
   if sample.isnumeric():
     for data in content:
       newcontent.append(int(data.strip()))
