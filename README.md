@@ -4,7 +4,7 @@
 
 ![Demo](img/demo.gif)
 
-Select a file from the *db* folder, select the solve method, then python button to request a response
+Select a file from the *DB* folder, select the solve method, then python button to request a response
 
 ## Built With
 
@@ -15,7 +15,7 @@ Select a file from the *db* folder, select the solve method, then python button 
 
 ## Deploy
 Download or clone this repo
-1. Open the index.html with your web browser or the liveview extension on VScode 
+1. Open the index.html with your web browser or the LiveView extension on VScode 
 ```
     http://localhost:5500
 ```
@@ -38,7 +38,7 @@ Feel free to check the [issues page](issues/).
 
 ## Show your support
 
-Give a ⭐️ if you like this project!
+Give an ⭐️ if you like this project!
 
 ## Acknowledgments
 
