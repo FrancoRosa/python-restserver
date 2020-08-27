@@ -1,2 +1,4 @@
 db/numbers.csv
 db/names.csv
+__pycache__/
+py/__pycache__/

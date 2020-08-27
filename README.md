@@ -1,17 +1,17 @@
 # Python-Solver
 
 > This is a FrontEnd/Backend project to send requests to a python server
-![Demo](demo.gif)
 
-## Live Demo
-![Screenshot](screenshot.png)
+![Demo](img/demo.gif)
+
+Select a file from the *db* folder, select the solve method, then python button to request a response
 
 ## Built With
 
 - JavaScript
 - HTML, CSS
 - Python, Flask, Flask-CORS
-- Deploy on [Netlify](https://www.netlify.com)
+
 
 ## Deploy
 Download or clone this repo
@@ -21,7 +21,7 @@ Download or clone this repo
 ```
 2. Navigate to the folder containing this repo and start the python server
 ```
-    $ python3 restserver.py
+    $ python3 py/restserver.py
 ```
 
 ## Author
@@ -42,7 +42,7 @@ Give a ⭐️ if you like this project!
 
 ## Acknowledgments
 
-- [Jenil Gogari](https://jgog.in) for the mod of bulma css framework that I used in this project.
+- [Jenil Gogari](https://jgog.in) for the mod of Bulma CSS framework that I used in this project.
 
 ## 📝 License
 
