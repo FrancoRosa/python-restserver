@@ -1,7 +1,7 @@
 # Python-Solver
 
 > This is a FrontEnd/Backend project to send requests to a python server
-
+![Demo](demo.gif)
 
 ## Live Demo
 ![Screenshot](screenshot.png)
