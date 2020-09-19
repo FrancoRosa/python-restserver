@@ -396,10 +396,16 @@ def orderMethod(method, array, samples):
         return heapSort(array[:samples])
     ## 09
     if 'Count' in method:
-        return radixSort(array[:samples])  
+        if isinstance(array[0], str): 
+            return heapSort(array[:samples])  
+        else:
+            return radixSort(array[:samples])  
     ## 10
     if 'Bin' in method:
-        return bin_sort(array[:samples])
+        if isinstance(array[0], str): 
+            return heapSort(array[:samples])  
+        else:
+            return bin_sort(array[:samples])
     ## 11
     if 'RandomiseSelection' in method:
         return ordenamientoPorSeleccion(array[:samples])  
@@ -412,21 +418,19 @@ def orderMethod(method, array, samples):
 
 
 # Algorithms test
-"""
-arr = [8,4,3,6,7,8,3,45,7,8]
+# arr = [8,4,3,6,7,8,3,45,7,8]
 # arr = ['d','e','f','g','h','a','b','c']
-print(arr)
+# print(arr)
 
-print(ordenamientoPorInsercion(arr))   #01
-print(ordenamientoDeShell(arr))        #02
-print(ordenamientoBurbuja(arr))        #03
-print(ordenamientoPorMezcla(arr))      #04
-print(ordenamientoRapido(arr))         #05
-print(bucket_sort(arr))                #06
-print(radixSort(arr))                  #07
-print(heapSort(arr) )                  #08
-print(radixSort(arr))                  #09
-print(bin_sort(arr))                   #10
-print(ordenamientoPorSeleccion(arr))   #11
-print(stoogesort(arr, 0, len(arr)-1))  #12
-"""
+# print(ordenamientoPorInsercion(arr))   #01
+# print(ordenamientoDeShell(arr))        #02
+# print(ordenamientoBurbuja(arr))        #03
+# print(ordenamientoPorMezcla(arr))      #04
+# print(ordenamientoRapido(arr))         #05
+# print(bucket_sort(arr))                #06
+# print(radixSort(arr))                  #07
+# print(heapSort(arr) )                  #08
+# print(radixSort(arr))                  #09
+# print(bin_sort(arr))                   #10
+# print(ordenamientoPorSeleccion(arr))   #11
+# print(stoogesort(arr, 0, len(arr)-1))  #12
