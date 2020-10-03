@@ -55,7 +55,7 @@ const timer = () => {
 
 const send = () => {
   const buttonParent = document.querySelector('.is-fetching');
-  const submitbutton = document.querySelector('.button');
+  const submitbutton = document.querySelector('.submit');
   const fileInput = document.querySelector('.file-input');
   const sortMethod = document.querySelector('.sort-method');
   const sampleVolume = document.querySelector('.sample-volume');
