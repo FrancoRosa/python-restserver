@@ -170,7 +170,7 @@ const fillTable = () => {
   let index = 0
   while (index < size){
     const tableRow = document.createElement('tr');
-    innerHTMLdata = `<td>${index}</td><td>${unordered[index]}</td><td>${ordered[index]}</td>`;
+    innerHTMLdata = `<td>${index+1}</td><td>${unordered[index]}</td><td>${ordered[index]}</td>`;
     console.log(innerHTMLdata);
     tableRow.innerHTML = innerHTMLdata;
     tableBody.appendChild(tableRow);
