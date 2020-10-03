@@ -37,3 +37,7 @@ h1 {
  .tables::-webkit-scrollbar {
   display: none;
 }
+
+#myChart {
+  height: 500px;
+}
