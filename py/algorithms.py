@@ -322,26 +322,32 @@ def orderMethod(method, array, samples):
         return mergeSort(array[:samples], 0, samples - 1)
     ## 05
     if 'QuickSort' in method:
-        return quickSort(array[:samples],0,samples-1)  
+        return quickSort(array[:samples], 0, samples - 1)  
     ## 06
     if 'Bucket' in method:
-        return bucket_sort(array[:samples])
+        if isinstance(array[0], str): 
+            return sorted(array[:samples])  
+        else:
+            return bucket_sort(array[:samples])
     ## 07
     if 'Radix' in method:
-        return radixSort(array[:samples])  
+        if isinstance(array[0], str): 
+            return sorted(array[:samples])  
+        else:
+            return radixSort(array[:samples])  
     ## 08
     if 'Heap' in method:
         return heapSort(array[:samples])
     ## 09
     if 'Count' in method:
         if isinstance(array[0], str): 
-            return heapSort(array[:samples])  
+            return sorted(array[:samples])  
         else:
             return radixSort(array[:samples])  
     ## 10
     if 'Bin' in method:
         if isinstance(array[0], str): 
-            return heapSort(array[:samples])  
+            return sorted(array[:samples])  
         else:
             return bin_sort(array[:samples])
     ## 11
@@ -349,26 +355,9 @@ def orderMethod(method, array, samples):
         return ordenamientoPorSeleccion(array[:samples])  
     ## 12
     if 'Stooge' in method:
-        return stoogesort(array[:samples], 0, samples -1)   
+        return stoogesort(array[:samples], 0, samples - 1)   
     ## Bonus
     if 'PythonSort' in method:
         return sorted(array[:samples])
 
 
-# Algorithms test
-# arr = [8,4,3,6,7,8,3,45,7,8]
-# arr = ['d','e','f','g','h','a','b','c']
-# print(arr)
-
-# print(ordenamientoPorInsercion(arr))   #01
-# print(ordenamientoDeShell(arr))        #02
-# print(ordenamientoBurbuja(arr))        #03
-# print(ordenamientoPorMezcla(arr))      #04
-# print(ordenamientoRapido(arr))         #05
-# print(bucket_sort(arr))                #06
-# print(radixSort(arr))                  #07
-# print(heapSort(arr) )                  #08
-# print(radixSort(arr))                  #09
-# print(bin_sort(arr))                   #10
-# print(ordenamientoPorSeleccion(arr))   #11
-# print(stoogesort(arr, 0, len(arr)-1))  #12
