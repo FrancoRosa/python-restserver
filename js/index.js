@@ -84,9 +84,7 @@ const send = () => {
         .then(response => response.json())
         .then(data => {
           chrono = !chrono;
-          console.log(data)
           showStop(data['time']);
-          console.log(data['message'])
           const methText = data['message'].split('<span class="has-text-info">')[3].split('<')[0]
           const timeText = data['message'].split('<span class="has-text-info">')[2].split('<')[0].split(' ')[0]
           addData(methText, timeText);
@@ -131,11 +129,9 @@ const updateFile = () => {
         .then(response => response.json())
         .then(data => {
           chrono = !chrono;
-          console.log(data);
           eventsLog.appendChild(message(data['message'],'success'));
         })
         .catch(error => {
-          console.log(error);
           chrono = !chrono;
           eventsLog.appendChild(message('Error en el servidor de python, no pudo cargar archivo','danger'));
         });
@@ -171,7 +167,6 @@ const fillTable = () => {
   while (index < size){
     const tableRow = document.createElement('tr');
     innerHTMLdata = `<td>${index+1}</td><td>${unordered[index]}</td><td>${ordered[index]}</td>`;
-    console.log(innerHTMLdata);
     tableRow.innerHTML = innerHTMLdata;
     tableBody.appendChild(tableRow);
     index = index + 1;
@@ -186,7 +181,7 @@ const myTimes = {
   data: {
       labels: [],
       datasets: [{
-          label: '# Tiempo',
+          label: 'Tiempo(s)',
           data: [],
           backgroundColor: [],
           borderColor: [],
@@ -204,6 +199,14 @@ const myTimes = {
   }
 }
 
+const cleanPlot = () => {
+  myTimes.data.labels = [];
+  myTimes.data.datasets[0].data = [];
+  myTimes.data.datasets[0].backgroundColor = [];
+  myTimes.data.datasets[0].borderColor = [];
+  window.myChart.update()
+} 
+
 const makeplot = () => {
   const ctx = document.getElementById('myChart').getContext('2d');
   const myChart = new Chart(ctx, myTimes);
@@ -218,9 +221,68 @@ const addData = (method, time) => {
   window.myChart.update();
 }
 
+const allMethods = () => {
+  const buttonParent = document.querySelector('.is-comparing');
+  const submitbutton = document.querySelector('.compare');
+  const fileInput = document.querySelector('.file-input');
+  const sampleVolume = document.querySelector('.sample-volume');
+  const fileError = document.querySelector('.file-error');
+  const eventsLog = document.querySelector('.events');
+  const options = Array.from(document.querySelector('.select').children[0]).map(x => x.outerText);
+  console.log(options) 
+  buttonParent.onclick = () => {
+    cleanPlot();
+    fileError.textContent = ''
+    if (fileInput.value == '') {
+      fileError.textContent = 'Selecciona un archivo'
+    } else{
+      submitbutton.classList.toggle('is-loading');
+      chrono = !chrono;
+      startChrono = Date.now()
+      if (chrono){
+        const samples = sampleVolume.value
+        
+        Promise.all(options.map( method =>
+          fetch(server, {
+            method: 'POST',
+            mode: 'cors',
+            headers: {
+              'Content-Type': 'application/json',
+              'API-Key': 'secret'
+            },
+            body: JSON.stringify({samples, method}),
+          })
+          .then(response => response.json())
+          .then(data => {
+            chrono = !chrono;
+            showStop(data['time']);
+            const methText = data['message'].split('<span class="has-text-info">')[3].split('<')[0]
+            const timeText = data['message'].split('<span class="has-text-info">')[2].split('<')[0].split(' ')[0]
+            addData(methText, timeText);
+            eventsLog.appendChild(message(data['message'],'success'));
+            submitbutton.classList.toggle('is-loading');
+            unordered = data['unordered'];
+            ordered = data['ordered'];
+            setTimeout(fillTable, 200);
+          })
+          .catch((error) => {
+            eventsLog.appendChild(message(`Error en el servidor Python`,'danger '))
+            console.error('Error:', error);
+            submitbutton.classList.toggle('is-loading');
+            chrono = !chrono;
+          })
+        ))
+
+
+      }  
+    }
+  }
+}
+
 window.onload = () => {
   updateFile();
   timer();
   send();
   makeplot();
+  allMethods();
 };
