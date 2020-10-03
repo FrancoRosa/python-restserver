@@ -20,7 +20,6 @@ const showStop = (seconds) => {
   decRender.innerHTML = dec;
 }
 
-
 const timer = () => {
   const minRender = document.querySelector('.min');
   const secRender = document.querySelector('.sec');
@@ -181,57 +180,65 @@ const fillTable = () => {
 const bgColor = 'rgba(75, 192, 192, 0.2)';
 const bdColor = 'rgba(75, 192, 192, 1)';
 
-const makeplot = () => {
-  var ctx = document.getElementById('myChart').getContext('2d');
-  var myChart = new Chart(ctx, {
-      type: 'bar',
-      data: {
-          labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange', 'Green', 'Purple', 'Orange'],
-          datasets: [{
-              label: '# Tiempo',
-              data: [12, 19, 3, 5, 2, 3, 5, 2, 3],
-              backgroundColor: [
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-              ],
-              borderColor: [
-                'rgba(75, 192, 192, 1)',
-                'rgba(75, 192, 192, 1)',
-                'rgba(75, 192, 192, 1)',
-                'rgba(75, 192, 192, 1)',
-                'rgba(75, 192, 192, 1)',
-                'rgba(75, 192, 192, 1)',
-                'rgba(75, 192, 192, 1)',
-                'rgba(75, 192, 192, 1)',
-                'rgba(75, 192, 192, 1)',
-              ],
-              borderWidth: 1
+const myTimes = {
+  type: 'bar',
+  data: {
+      labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange', 'Green', 'Purple', 'Orange'],
+      datasets: [{
+          label: '# Tiempo',
+          data: [12, 19, 3, 5, 2, 3, 5, 2, 3],
+          backgroundColor: [
+            'rgba(75, 192, 192, 0.2)',
+            'rgba(75, 192, 192, 0.2)',
+            'rgba(75, 192, 192, 0.2)',
+            'rgba(75, 192, 192, 0.2)',
+            'rgba(75, 192, 192, 0.2)',
+            'rgba(75, 192, 192, 0.2)',
+            'rgba(75, 192, 192, 0.2)',
+            'rgba(75, 192, 192, 0.2)',
+            'rgba(75, 192, 192, 0.2)',
+          ],
+          borderColor: [
+            'rgba(75, 192, 192, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(75, 192, 192, 1)',
+          ],
+          borderWidth: 1
+      }]
+  },
+  options: {
+      scales: {
+          yAxes: [{
+              ticks: {
+                  beginAtZero: true
+              }
           }]
-      },
-      options: {
-          scales: {
-              yAxes: [{
-                  ticks: {
-                      beginAtZero: true
-                  }
-              }]
-          }
       }
-  });
+  }
+}
+
+const makeplot = () => {
+  const ctx = document.getElementById('myChart').getContext('2d');
+  const myChart = new Chart(ctx, myTimes);
+  window.myChart = myChart;
 }
 
 const addData = () => {
-  const button = document.querySelector('adddata');
-  button.onclick(() => {
+  const button = document.querySelector('.adddata');
+  button.onclick = () => {
     console.log('click!');
-  })
+    myTimes.data.labels.push('test');
+    myTimes.data.datasets[0].data.push(5);
+    myTimes.data.datasets[0].backgroundColor.push(bgColor);
+    myTimes.data.datasets[0].borderColor.push(bdColor);
+    window.myChart.update();
+  }
 }
 
 window.onload = () => {
@@ -239,4 +246,5 @@ window.onload = () => {
   timer();
   send();
   makeplot();
+  addData();
 };
