@@ -86,6 +86,10 @@ const send = () => {
           chrono = !chrono;
           console.log(data)
           showStop(data['time']);
+          console.log(data['message'])
+          const methText = data['message'].split('<span class="has-text-info">')[3].split('<')[0]
+          const timeText = data['message'].split('<span class="has-text-info">')[2].split('<')[0].split(' ')[0]
+          addData(methText, timeText);
           eventsLog.appendChild(message(data['message'],'success'));
           submitbutton.classList.toggle('is-loading');
           unordered = data['unordered'];
@@ -98,9 +102,6 @@ const send = () => {
           submitbutton.classList.toggle('is-loading');
           chrono = !chrono;
         });
-      // send post to API return file size
-      // send post to solve algoritm
-      // Append what was done in the register
       }
     }
   }
@@ -183,32 +184,12 @@ const bdColor = 'rgba(75, 192, 192, 1)';
 const myTimes = {
   type: 'bar',
   data: {
-      labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange', 'Green', 'Purple', 'Orange'],
+      labels: [],
       datasets: [{
           label: '# Tiempo',
-          data: [12, 19, 3, 5, 2, 3, 5, 2, 3],
-          backgroundColor: [
-            'rgba(75, 192, 192, 0.2)',
-            'rgba(75, 192, 192, 0.2)',
-            'rgba(75, 192, 192, 0.2)',
-            'rgba(75, 192, 192, 0.2)',
-            'rgba(75, 192, 192, 0.2)',
-            'rgba(75, 192, 192, 0.2)',
-            'rgba(75, 192, 192, 0.2)',
-            'rgba(75, 192, 192, 0.2)',
-            'rgba(75, 192, 192, 0.2)',
-          ],
-          borderColor: [
-            'rgba(75, 192, 192, 1)',
-            'rgba(75, 192, 192, 1)',
-            'rgba(75, 192, 192, 1)',
-            'rgba(75, 192, 192, 1)',
-            'rgba(75, 192, 192, 1)',
-            'rgba(75, 192, 192, 1)',
-            'rgba(75, 192, 192, 1)',
-            'rgba(75, 192, 192, 1)',
-            'rgba(75, 192, 192, 1)',
-          ],
+          data: [],
+          backgroundColor: [],
+          borderColor: [],
           borderWidth: 1
       }]
   },
@@ -229,16 +210,12 @@ const makeplot = () => {
   window.myChart = myChart;
 }
 
-const addData = () => {
-  const button = document.querySelector('.adddata');
-  button.onclick = () => {
-    console.log('click!');
-    myTimes.data.labels.push('test');
-    myTimes.data.datasets[0].data.push(5);
-    myTimes.data.datasets[0].backgroundColor.push(bgColor);
-    myTimes.data.datasets[0].borderColor.push(bdColor);
-    window.myChart.update();
-  }
+const addData = (method, time) => {
+  myTimes.data.labels.push(method);
+  myTimes.data.datasets[0].data.push(time);
+  myTimes.data.datasets[0].backgroundColor.push(bgColor);
+  myTimes.data.datasets[0].borderColor.push(bdColor);
+  window.myChart.update();
 }
 
 window.onload = () => {
@@ -246,5 +223,4 @@ window.onload = () => {
   timer();
   send();
   makeplot();
-  addData();
 };
