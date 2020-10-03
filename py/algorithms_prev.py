@@ -1,91 +1,124 @@
 ##-01Insert
-def ordenamientoPorInsercion(A):
-    for j in range(1, len(A)):
-        key = A[j] 
-        i = j-1
-        while i >= 0 and A[i] > key : 
-            A[i + 1] = A[i] 
-            i = i - 1
-        A[i+1] = key 
-    return A  
+def ordenamientoPorInsercion(unaLista):
+    for indice in range(1,len(unaLista)):
+
+        valorActual = unaLista[indice]
+        posicion = indice
+
+        while posicion>0 and unaLista[posicion-1]>valorActual:
+            unaLista[posicion]=unaLista[posicion-1]
+            posicion = posicion-1
+
+        unaLista[posicion]=valorActual
+    return(unaLista)
 # ordenamientoPorInsercion(unaLista) 
 
 ##-02Shell
-def ordenamientoDeShell(A):
-    n = len(A) 
-    gap = n//2
-    while gap > 0: 
-        for i in range(gap,n): 
-            temp = A[i] 
-            j = i 
-            while  j >= gap and A[j-gap] >temp: 
-                A[j] = A[j-gap] 
-                j -= gap 
-            A[j] = temp 
-        gap //= 2
-    return A
+def ordenamientoDeShell(unaLista):
+    contadorSublistas = len(unaLista)//2
+    while contadorSublistas > 0:
+        for posicionInicio in range(contadorSublistas):
+            brechaOrdenamientoPorInsercion(unaLista,posicionInicio,contadorSublistas)
+        contadorSublistas = contadorSublistas // 2
+    return unaLista
+
+def brechaOrdenamientoPorInsercion(unaLista,inicio,brecha):
+    for i in range(inicio+brecha,len(unaLista),brecha):
+
+        valorActual = unaLista[i]
+        posicion = i
+
+        while posicion>=brecha and unaLista[posicion-brecha]>valorActual:
+            unaLista[posicion]=unaLista[posicion-brecha]
+            posicion = posicion-brecha
+
+        unaLista[posicion]=valorActual
 # ordenamientoDeShell(unaLista)
 
 ##-03Bubble
-def ordenamientoBurbuja(A):
-    for i in range(len(A)):         
-        for j in range(0, len(A)-i-1):             
-            if A[j] > A[j+1] : 
-                A[j], A[j+1] = A[j+1], A[j] 
-    return A
+def ordenamientoBurbuja(unaLista):
+    for numPasada in range(len(unaLista)-1,0,-1):
+        for i in range(numPasada):
+            if unaLista[i]>unaLista[i+1]:
+                temp = unaLista[i]
+                unaLista[i] = unaLista[i+1]
+                unaLista[i+1] = temp
+    return unaLista
 # ordenamientoBurbuja(unaLista)
 
 ##-04Merge
-import math
-def mergeSort(A, l, r):
-    if l < r:
-        m = (l + r) // 2
-        mergeSort(A, l, m)
-        mergeSort(A, m + 1, r)
-        merge(A, l, m, r)
-    return A
+def ordenamientoPorMezcla(unaLista):
+    if len(unaLista)>1:
+        mitad = len(unaLista)//2
+        mitadIzquierda = unaLista[:mitad]
+        mitadDerecha = unaLista[mitad:]
 
-def merge(A, l, m, r):
-    nL = m - l + 1
-    nR = r - m
-    L = [0] * (nL + 1)
-    R = [0] * (nR + 1)
-    for i in range(0, nL):
-        L[i] = A[l + i]
-    for j in range(0, nR):
-        R[j] = A[m + 1 + j]
-    L[nL] = math.inf
-    R[nR] = math.inf
-    i = 0
-    j = 0
-    for k in range(l, r + 1):
-        if L[i] <= R[j]:
-            A[k] = L[i]
-            i += 1
-        else:
-            A[k] = R[j]
-            j += 1
+        ordenamientoPorMezcla(mitadIzquierda)
+        ordenamientoPorMezcla(mitadDerecha)
+
+        i=0
+        j=0
+        k=0
+        while i < len(mitadIzquierda) and j < len(mitadDerecha):
+            if mitadIzquierda[i] < mitadDerecha[j]:
+                unaLista[k]=mitadIzquierda[i]
+                i=i+1
+            else:
+                unaLista[k]=mitadDerecha[j]
+                j=j+1
+            k=k+1
+
+        while i < len(mitadIzquierda):
+            unaLista[k]=mitadIzquierda[i]
+            i=i+1
+            k=k+1
+
+        while j < len(mitadDerecha):
+            unaLista[k]=mitadDerecha[j]
+            j=j+1
+            k=k+1
+    return unaLista
 # ordenamientoPorMezcla(unaLista)
  
 ##-05Quicksort
-def quickSort(A, p, r):
-    if p < r:
-        q = partition(A, p, r)
-        quickSort(A, p, q-1)
-        quickSort(A, q+1, r)
-    return A
+def ordenamientoRapido(unaLista):
+    ordenamientoRapidoAuxiliar(unaLista,0,len(unaLista)-1)
+    return unaLista
+def ordenamientoRapidoAuxiliar(unaLista,primero,ultimo):
+   if primero<ultimo:
 
-def partition(A, p, r):
-    x = A[r]
-    i = (p-1)         
-    for j in range(p, r):
-        if A[j] <= x:
-            i = i+1
-            A[i], A[j] = A[j], A[i]
- 
-    A[i+1], A[r] = A[r], A[i+1]
-    return (i+1)
+       puntoDivision = particion(unaLista,primero,ultimo)
 
+       ordenamientoRapidoAuxiliar(unaLista,primero,puntoDivision-1)
+       ordenamientoRapidoAuxiliar(unaLista,puntoDivision+1,ultimo)
+def particion(unaLista,primero,ultimo):
+   valorPivote = unaLista[primero]
+
+   marcaIzq = primero+1
+   marcaDer = ultimo
+
+   hecho = False
+   while not hecho:
+
+       while marcaIzq <= marcaDer and unaLista[marcaIzq] <= valorPivote:
+           marcaIzq = marcaIzq + 1
+
+       while unaLista[marcaDer] >= valorPivote and marcaDer >= marcaIzq:
+           marcaDer = marcaDer -1
+
+       if marcaDer < marcaIzq:
+           hecho = True
+       else:
+           temp = unaLista[marcaIzq]
+           unaLista[marcaIzq] = unaLista[marcaDer]
+           unaLista[marcaDer] = temp
+
+   temp = unaLista[primero]
+   unaLista[primero] = unaLista[marcaDer]
+   unaLista[marcaDer] = temp
+
+
+   return marcaDer
 # ordenamientoRapido(unaLista)
  
 ##-06Bucket
@@ -167,26 +200,42 @@ def radixSort(arr):
 # radixSort(arr)
  
 ##-08heap
-def heapify(A, n, i): 
-    largest = i  
-    l = 2 * i + 1  
-    r = 2 * i + 2  
-    if l < n and A[i] < A[l]: 
+def heapify(arr, n, i): 
+    largest = i  # Initialize largest as root 
+    l = 2 * i + 1     # left = 2*i + 1 
+    r = 2 * i + 2     # right = 2*i + 2 
+  
+    # See if left child of root exists and is 
+    # greater than root 
+    if l < n and arr[i] < arr[l]: 
         largest = l 
-    if r < n and A[largest] < A[r]: 
+  
+    # See if right child of root exists and is 
+    # greater than root 
+    if r < n and arr[largest] < arr[r]: 
         largest = r 
+  
+    # Change root, if needed 
     if largest != i: 
-        A[i],A[largest] = A[largest],A[i]  
-        heapify(A, n, largest) 
-    
-def heapSort(A): 
-    n = len(A) 
-    for i in range(n//2 - 1, -1, -1): 
-        heapify(A, n, i) 
+        arr[i],arr[largest] = arr[largest],arr[i]  # swap 
+  
+        # Heapify the root. 
+        heapify(arr, n, largest) 
+# The main function to sort an array of given size 
+def heapSort(arr): 
+    n = len(arr) 
+  
+    # Build a maxheap. 
+    # Since last parent will be at ((n//2)-1) we can start at that location. 
+    for i in range(n // 2 - 1, -1, -1): 
+        heapify(arr, n, i) 
+  
+    # One by one extract elements 
     for i in range(n-1, 0, -1): 
-        A[i], A[0] = A[0], A[i]
-        heapify(A, i, 0) 
-    return A
+        arr[i], arr[0] = arr[0], arr[i]   # swap 
+        heapify(arr, i, 0) 
+  
+    return arr
 # heapSort(arr) 
 
 ##-09Count
@@ -292,19 +341,32 @@ def ordenamientoPorSeleccion(unaLista):
 # ordenamientoPorSeleccion(unaLista)
 
 ##-12Stooge
-def stoogesort(A, i, j): 
-    if i >= j: 
+def stoogesort(arr, l, h):
+    if l >= h:
         return
-    if A[i]>A[j]: 
-        t = A[i] 
-        A[i] = A[j] 
-        A[j] = t 
-    if j-i + 1 > 2: 
-        t = (int)((j-i + 1)/3) 
-        stoogesort(A, i, (j-t)) 
-        stoogesort(A, i + t, (j)) 
-        stoogesort(A, i, (j-t))
-    return A 
+  
+    # If first element is smaller
+    # than last,swap them
+    if arr[l]>arr[h]:
+        t = arr[l]
+        arr[l] = arr[h]
+        arr[h] = t
+  
+    # If there are more than 2 elements in
+    # the array
+    if h-l+1 > 2:
+        t = (int)((h-l+1)/3)
+  
+        # Recursively sort first 2/3 elements
+        stoogesort(arr, l, (h-t))
+  
+        # Recursively sort last 2/3 elements
+        stoogesort(arr, l+t, (h))
+  
+        # Recursively sort first 2/3 elements
+        # again to confirm
+        stoogesort(arr, l, (h-t))
+    return arr
   
 def orderMethod(method, array, samples):
     samples = int(samples)
@@ -319,10 +381,10 @@ def orderMethod(method, array, samples):
         return ordenamientoBurbuja(array[:samples])  
     ## 04
     if 'Merge' in method:
-        return mergeSort(array[:samples], 0, samples - 1)
+        return ordenamientoPorMezcla(array[:samples])
     ## 05
     if 'QuickSort' in method:
-        return quickSort(array[:samples],0,samples-1)  
+        return ordenamientoRapido(array[:samples])  
     ## 06
     if 'Bucket' in method:
         return bucket_sort(array[:samples])
