@@ -16,7 +16,7 @@ CORS(app)
 
 about = {
         'author': u'Gared',
-        'methods': u'Insert, Bubble, Ramdom'
+        'methods': u'Insert, Bubble, Ramdom, etc.'
         }
 
 @app.route('/', methods=['GET'])
